@@ -53,6 +53,7 @@ func(srv *ImageGeneratorHandler) HandleImageGeneration(w http.ResponseWriter, r 
 
 	filename := header.Filename
 	data := r.Context().Value("metaData")
+
 	metaData := data.(models.ContextMetaData)
 	// check for the file extension
 	if filepath.Ext(filename) != ".raw"{
@@ -89,9 +90,12 @@ func(srv *ImageGeneratorHandler) HandleImageGeneration(w http.ResponseWriter, r 
 	fmt.Println("Storage key: ", exactFilePathForRawFile)
 
 	var uploadingMetaData models.UploadedFilesMetaData = models.UploadedFilesMetaData{
+		UserId: int64(metaData.UserId),
 		Filename: filename,
+		StorageKey: exactFilePathForRawFile,
 		FileType: ".raw",
-
+		Mimetype: mimeType,
+		FileSize: size,
 	}
 
 
@@ -106,6 +110,8 @@ func(srv *ImageGeneratorHandler) HandleImageGeneration(w http.ResponseWriter, r 
 		json.NewEncoder(w).Encode(response)
 		return
 	}
+
+	fmt.Println("Uploaded id is: ", uploadedId)
 
 	
 	allGeneratedImageFiles,statusCode, err := srv.Savator.GenerateImage(exactFilePathForRawFile, strconv.Itoa(metaData.UserId))

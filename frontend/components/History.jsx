@@ -29,6 +29,7 @@ function History({output, history, setHistory}){
             if (errorStatus ===  401){
                 // get new access token
                 const response = await getNewAccessToken(refreshToken);
+                console.log("Historical Data:" ,response);
                 if (response === 401){
                     // check for the refresh token availability
                      alert("You are logged out. Please login again");

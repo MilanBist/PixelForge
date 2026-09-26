@@ -56,6 +56,9 @@ func(h *History) HandleHistory(w http.ResponseWriter, r *http.Request){
 			image1.Id = value.ImageId
 			image1.ImageName = value.ImageName
 			image1.Mimetype = value.MimeType
+			image1.Width = value.Width
+			image1.Height = value.Height
+			image1.FileSize = value.FileSize
 			image = append(image, image1)
 		} else{
 			if value.UploadedFileId == int(data1.ActualFile.Id){
@@ -64,6 +67,9 @@ func(h *History) HandleHistory(w http.ResponseWriter, r *http.Request){
 				image1.Id = value.ImageId
 				image1.ImageName = value.ImageName
 				image1.Mimetype = value.MimeType
+				image1.Width = value.Width
+				image1.Height = value.Height
+				image1.FileSize = value.FileSize
 				image = append(image, image1)
 			} else{
 				//if not equal then append the whole of the data to sendind data and set it to null
@@ -87,6 +93,9 @@ func(h *History) HandleHistory(w http.ResponseWriter, r *http.Request){
 				image1.Id = value.ImageId
 				image1.ImageName = value.ImageName
 				image1.Mimetype = value.MimeType
+				image1.Width = value.Width
+				image1.Height = value.Height
+				image1.FileSize = value.FileSize
 				image = append(image, image1)
 			}
 		}

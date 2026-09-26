@@ -42,8 +42,7 @@ export default function ImageCard({ image }) {
         try {
             const response = await apiClient.get("/getSingleImage", {
                 params: {
-                    id: image.id,
-                    storageKey: image.storageKey,
+                    id: image.imageId,
                     mimetype: image.mimetype,
                 },
                 responseType: "blob", 
@@ -85,7 +84,7 @@ export default function ImageCard({ image }) {
 
                 {/* Basic information */}
                 <div className="image-details">
-                    <h3>{image["filename"]}</h3>
+                    <h3>{image["imageName"]}</h3>
                     <div className="metadata">
 
                         <div>

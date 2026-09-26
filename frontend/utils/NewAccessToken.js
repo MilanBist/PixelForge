@@ -7,17 +7,9 @@ export async function getNewAccessToken(refreshToken){
     }
     try{
         const resp = await apiClient.post("/refreshToken", tokenBody);
-        let responseData = resp.data["message"];
-
-        console.log(responseData);
-        if(responseData === "expired"){
-            return 401;
-        }
         localStorage.setItem("accessToken", resp.data["data"]["accessToken"]);
         return 200;
     }catch(err){
-        console.log(err);
-        console.log("Error in generating the new refresh token: ", err);
-        return 400;
+        return err.response.status;
     }
 }

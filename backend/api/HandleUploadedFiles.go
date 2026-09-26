@@ -19,9 +19,7 @@ type UploadedFiles struct{
 func(u *UploadedFiles) HandleUploadedFiles(w http.ResponseWriter, r *http.Request){
 	value := r.Context().Value("metaData")
 	metaData := value.(models.ContextMetaData)
-
 	fmt.Println(metaData)
-
 	uploadedFiiles, err := u.Files.GetAllUploadedFiles(metaData.UserId)
 
 	if err != nil{
@@ -39,7 +37,7 @@ func(u *UploadedFiles) HandleUploadedFiles(w http.ResponseWriter, r *http.Reques
 		Message: "Success in retrieving the data.",
 		Data: uploadedFiiles,
 	}
+
 	w.WriteHeader(http.StatusAccepted)
 	json.NewEncoder(w).Encode(&response)
-	
 }

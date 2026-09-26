@@ -131,7 +131,7 @@ func (p *PostgresData) GetHistoryDataOfUser(userId int) ([]models.HistoricalData
 		"images"."mimeType",
 		"images"."height",
 		"images"."width",
-		"images"."fileSize",
+		"images"."fileSize"
 		FROM "uploadedFiles"
 		JOIN "images"
 			ON "images"."sourceFileId" = "uploadedFiles"."id"

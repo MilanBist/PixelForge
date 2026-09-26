@@ -49,8 +49,8 @@ function App() {
       
       <Route path="/uploadedFiles" element={
         <>
-        <Navbar currentStatus={currentStatus}/>
-          <UploadedFiles />
+          <Navbar currentStatus={currentStatus}/>
+          <UploadedFiles uploaded={uploaded} setUploaded={setUploaded}/>
         </>
       } />
 
