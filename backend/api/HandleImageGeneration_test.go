@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
-
 	"github.com/image-generator/engine"
 	"github.com/image-generator/internal/models"
 )
@@ -46,6 +45,9 @@ func (u *UploadGeneration) AddUploadedFiles(uploadedMetaData models.UploadedFile
 
 func (u *UploadGeneration) AddGeneratedFiles(generatedFilesMetaData models.GeneratedImageMetaData)(int64, error){
 	return u.ImageId, u.Error
+}
+func (u *UploadGeneration) AddToHistoryOfUser(historyData models.History) (error){
+	return nil
 }
 
 func (fd *FakeDimension) GetDimension(location string) (int, int, int64, error){

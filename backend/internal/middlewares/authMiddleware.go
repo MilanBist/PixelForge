@@ -12,7 +12,6 @@ import (
 
 func AuthenticationMiddleware(next http.Handler) http.Handler{
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-
 		stringedToken := r.Header.Get("Authorization")
 		fmt.Println("[AUTH MIDDLEWARE]: Token: ", stringedToken)
 		if stringedToken == ""{

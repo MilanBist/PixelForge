@@ -1,0 +1,115 @@
+/* Main history container */
+.uploaded-files {
+    width: 100%;
+    max-width: 900px;
+    margin: 30px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+/* Individual uploaded file */
+.uploaded-file-card {
+    width: 100%;
+    min-height: 82px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 16px 20px;
+
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+
+    box-sizing: border-box;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+.uploaded-file-card:hover {
+    border-color: #cfd3d8;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+    transform: translateY(-1px);
+}
+
+/* RAW file icon */
+.uploaded-file-icon {
+    width: 46px;
+    height: 46px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #111827;
+}
+
+/* File information */
+.uploaded-file-info {
+    flex: 1;
+    min-width: 0;
+    margin-left: 16px;
+}
+
+.uploaded-file-info h3 {
+    margin: 0 0 7px;
+
+    font-size: 15px;
+    font-weight: 600;
+    color: #111827;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* File metadata */
+.uploaded-file-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    font-size: 13px;
+    color: #6b7280;
+}
+
+/* View button */
+.uploaded-file-button {
+    padding: 8px 16px;
+
+    background: #111111;
+    color: #ffffff;
+
+    border: none;
+    border-radius: 7px;
+
+    font-size: 13px;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.15s ease;
+}
+
+.uploaded-file-button:hover {
+    background: #2a2a2a;
+}
+
+.uploaded-file-button:active {
+    transform: scale(0.97);
+}

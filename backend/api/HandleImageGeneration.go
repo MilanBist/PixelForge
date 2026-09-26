@@ -22,6 +22,7 @@ type ImageGeneration interface{
 type UploadGenerationStore interface{
 	AddUploadedFiles(uploadedMetaData models.UploadedFilesMetaData) (int, error)
 	AddGeneratedFiles(generatedFilesMetaData models.GeneratedImageMetaData) (int64, error)
+	AddToHistoryOfUser(historyData models.History)(error)
 }
 
 // image dimesion interface
@@ -40,30 +41,31 @@ type ImageGeneratorHandler struct{
 func(srv *ImageGeneratorHandler) HandleImageGeneration(w http.ResponseWriter, r *http.Request){
 	// get the image 
 	file,header, err := r.FormFile("file")
-
 	if err != nil {
 		fmt.Println(err)
         http.Error(w, "failed to get file", http.StatusBadRequest)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{
+			"message": "Input file missing.",
+		})
         return
     }
 
 	filename := header.Filename
-
-	// get the userId and create the full fileName
-	// get the user_id as well from the context
 	data := r.Context().Value("metaData")
-	metaData := data.(models.ContextMetaData)
 
+	metaData := data.(models.ContextMetaData)
 	// check for the file extension
 	if filepath.Ext(filename) != ".raw"{
 		fmt.Println("Wrong file name. Should be .raw file.")
-		http.Error(w, "Wrong file input should be .raw insted.", http.StatusBadRequest)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(map[string]string{
+			"message": "Input .raw file.",
+		})
 		return
 	}
 
 	fmt.Println("Meta data is; ", metaData)
-
-	// get the dimension of the file 
 
 
 	// add the file data to the given location
@@ -96,6 +98,7 @@ func(srv *ImageGeneratorHandler) HandleImageGeneration(w http.ResponseWriter, r 
 		FileSize: size,
 	}
 
+
 	uploadedId, err := srv.Store.AddUploadedFiles(uploadingMetaData)
 	if err != nil{
 		response := models.Response{
@@ -108,12 +111,14 @@ func(srv *ImageGeneratorHandler) HandleImageGeneration(w http.ResponseWriter, r 
 		return
 	}
 
+	fmt.Println("Uploaded id is: ", uploadedId)
+
 	
 	allGeneratedImageFiles,statusCode, err := srv.Savator.GenerateImage(exactFilePathForRawFile, strconv.Itoa(metaData.UserId))
 	if err != nil{
 		response := models.Response{
 			Success: false,
-			Message: err.Error(),
+			Message: "Internal server error",
 		}
 
 		w.WriteHeader(500)
@@ -152,6 +157,15 @@ func(srv *ImageGeneratorHandler) HandleImageGeneration(w http.ResponseWriter, r 
 			FileSize: size,
 		}
 
+
+		// prepare the data to send to frontned
+		frontendSendingCredentials := models.BaseImageMetaData{
+			Mimetype: "image/jpg",
+			Width: width,
+			Height: height,
+			FileSize: size,
+		}
+
 		id, err := srv.Store.AddGeneratedFiles(credentials)
 		if err != nil{
 			response := models.Response{
@@ -165,10 +179,37 @@ func(srv *ImageGeneratorHandler) HandleImageGeneration(w http.ResponseWriter, r 
 		}
 		// also fill the id as well
 		credentials.Id = int64(id)
+		frontendSendingCredentials.Id = id
+		
+		historyCredentials := models.History{
+			UserID: int64(metaData.UserId),
+			SourceFileID: int64(uploadedId),
+			OutputImageID: int64(id),
+			OperationType: "rawFile",
+			Parameters: map[string]any{
+				"height":height,
+				"width":width,
+				"size":size,
+			},
+			Status: "Completed",
+		}
 
+		fmt.Println("History creadentials are: ", historyCredentials)
+		// add this to the history
+		err = srv.Store.AddToHistoryOfUser(historyCredentials)
+		fmt.Println(err)
+		if err != nil{
+			response := models.Response{
+			Success: false,
+			Message: err.Error(),
+			}
+			w.WriteHeader(500)
+			json.NewEncoder(w).Encode(response)
+			return
+		}
 
 		// also add to the generageted image
-		returningImageResponse.GeneratedImage = append(returningImageResponse.GeneratedImage, credentials)
+		returningImageResponse.GeneratedImage = append(returningImageResponse.GeneratedImage, frontendSendingCredentials)
 	}
 
 	// for all of the png files being uploaded
@@ -192,25 +233,60 @@ func(srv *ImageGeneratorHandler) HandleImageGeneration(w http.ResponseWriter, r 
 			FileSize: size,
 		}
 
+		frontendSendingCredentials := models.BaseImageMetaData{
+			Mimetype: "image/png",
+			Width: width,
+			Height: height,
+			FileSize: size,
+		}
+
 		id, err := srv.Store.AddGeneratedFiles(credentials)
 		if err != nil{
 			response := models.Response{
 			Success: false,
 			Message: err.Error(),
-		}
+			}
 			w.WriteHeader(500)
 			json.NewEncoder(w).Encode(response)
 			return	
 		}
+
+		frontendSendingCredentials.Id = id
+
+		historyCredentials := models.History{
+			UserID: int64(metaData.UserId),
+			SourceFileID: int64(uploadedId),
+			OutputImageID: int64(id),
+			OperationType: "rawFile",
+			Parameters: map[string]any{
+				"height":height,
+				"width":width,
+				"size":size,
+			},
+			Status: "Completed",
+		}
+
+		// add this to the history
+		err = srv.Store.AddToHistoryOfUser(historyCredentials)
+		if err != nil{
+			response := models.Response{
+			Success: false,
+			Message: err.Error(),
+			}
+
+			w.WriteHeader(500)
+			json.NewEncoder(w).Encode(response)
+			return
+		}
 		credentials.Id = int64(id)
-		returningImageResponse.GeneratedImage = append(returningImageResponse.GeneratedImage, credentials)
+		returningImageResponse.GeneratedImage = append(returningImageResponse.GeneratedImage, frontendSendingCredentials)
 
 	}
 
-
 	// add the data of the actual filename
 	returningImageResponse.ActualFile.Id = int64(uploadedId)
-	returningImageResponse.ActualFile.Name = filename
+	returningImageResponse.ActualFile.Filename = filename
+	returningImageResponse.ActualFile.FileType = ".raw"
 
 
 	// final response link the uploaded files and the other files which are generated

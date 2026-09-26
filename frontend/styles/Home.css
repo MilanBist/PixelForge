@@ -1,0 +1,524 @@
+.navbar {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    padding: 0 30px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #eeeeee;
+}
+
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.brand-icon {
+    width: 75px;
+    height: 75px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.brand-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.brand h2 {
+    margin: 0;
+    font-size: 30px;
+    font-weight: 600;
+    color: #222222;
+}
+
+.brand span {
+    display: block;
+    margin-top: 2px;
+    font-size: 15px;
+    color: #888888;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    margin-left: 50px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    font-size: 20px;
+    color: #666666;
+}
+
+.nav-links a:hover {
+    color: #222222;
+}
+
+.nav-links a.active {
+    color: #222222;
+    font-weight: 500;
+}
+
+.auth-links {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 50px;
+}
+.auth-links a{
+    text-decoration: none;
+    font-size: 20px;
+    color: #666666;
+}
+
+.auth-links a:hover {
+    color: #222222;
+}
+
+
+/* For the raw extraction part */
+
+.asset-card {
+    width: 380px;
+    padding: 24px;
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    box-sizing: border-box;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-left: 2%;
+    margin-top: 30px;
+}
+
+
+/* Card Header */
+.asset-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+/* Cloud Icon */
+.asset-icon {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f1f5f9;
+    border-radius: 10px;
+    font-size: 22px;
+}
+
+
+
+
+/* Card Heading */
+.asset-card h3 {
+    margin: 4px 0 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #111827;
+}
+
+
+/* Card Description */
+.asset-card p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #6b7280;
+}
+
+
+/* Common Button Styling */
+.asset-card button {
+    width: 100%;
+    padding: 11px 16px;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.1s ease;
+}
+
+
+/* Primary Button */
+.primary-button {
+    border: 1px solid #2563eb;
+    background-color: #2563eb;
+    color: #ffffff;
+}
+
+.primary-button:hover {
+    background-color: #1d4ed8;
+}
+
+.primary-button:active {
+    transform: scale(0.98);
+}
+
+
+/* Secondary Button */
+.secondary-button {
+    border: 1px solid #d1d5db;
+    background-color: #ffffff;
+    color: #374151;
+}
+
+.secondary-button:hover {
+    background-color: #f9fafb;
+    border-color: #9ca3af;
+}
+
+.secondary-button:active {
+    transform: scale(0.98);
+}
+
+
+/* Card Footer */
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-top: 4px;
+    padding-top: 14px;
+
+    border-top: 1px solid #eeeeee;
+
+    font-size: 12px;
+    color: #9ca3af;
+}
+
+.uploadFile {
+    width: 100%;
+    padding: 10px;
+
+    border: 1px solid #ddd;
+    border-radius: 8px;
+
+    background-color: #f9f9f9;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.uploadFile::file-selector-button {
+    padding: 7px 12px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 6px;
+    background-color: #2563eb;
+    color: white;
+
+    cursor: pointer;
+}
+
+.uploadFile::file-selector-button:hover {
+    background-color: #1d4ed8;
+}
+
+
+
+/* Responsive */
+@media (max-width: 500px) {
+    .asset-card {
+        width: 100%;
+        padding: 20px;
+    }
+}
+
+
+.uploadImage {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: #fafafa;
+    font-size: 14px;
+}
+
+.uploadImage::file-selector-button {
+    padding: 7px 12px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 6px;
+    background-color: #2563eb;
+    color: white;
+
+    cursor: pointer;
+}
+
+.uploadImage::file-selector-button:hover {
+    background-color: #1d4ed8;
+}
+
+
+/* Upload button */
+.uploadraw-button {
+    width: 100%;
+    padding: 10px;
+
+    border: none;
+    border-radius: 6px;
+
+    background-color: #333;
+    color: white;
+
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.uploadraw-button:hover {
+    background-color: #222;
+}
+
+
+/* Work on the source assets */
+.section {
+  width: 100%;
+  max-width: 1100px;
+  margin: 60px auto;
+  padding: 0 30px;
+}
+
+/* Heading */
+.section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.section-heading h2 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.section-heading span {
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  color: #777;
+}
+
+/* Cards */
+.asset-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+
+  /* Center the cards */
+  justify-content: center;
+}
+
+/* Optional: make cards equal height */
+
+
+/* Responsive */
+@media (max-width: 700px) {
+  .asset-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .section-heading {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
+.search-container {
+  display: flex;
+    align-items: center;
+    position: relative;
+
+  width: 100%;
+  max-width: 600px;
+  margin: 20px auto;
+
+    padding: 8px 56px 8px 16px;
+
+  background: #ffffff;
+  border: 1px solid #dcdcdc;
+  border-radius: 18px;
+
+  box-sizing: border-box;
+
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Focus effect when textarea is being used */
+.search-container:focus-within {
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.08);
+}
+
+
+/* =========================
+   TEXTAREA
+   ========================= */
+
+.searcharea {
+  flex: 1;
+  min-width: 0;
+
+    width: 100%;
+    min-height: 36px;
+  max-height: 140px;
+
+    padding: 6px 0;
+    box-sizing: border-box;
+
+  border: none;
+  outline: none;
+  resize: none;
+
+  background: transparent;
+
+  font-family: inherit;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #333;
+
+  overflow-y: auto;
+}
+
+/* Placeholder */
+.searcharea::placeholder {
+  color: #999;
+}
+
+
+/* =========================
+   SEARCH BUTTON
+   ========================= */
+.search-container {
+  position: relative;
+
+  display: flex;
+  align-items: flex-end;
+
+  width: 100%;
+  max-width: 600px;
+
+  margin: 20px auto;
+  padding: 8px 55px 8px 16px;
+
+  box-sizing: border-box;
+
+  background: #ffffff;
+  border: 1px solid #dcdcdc;
+  border-radius: 20px;
+
+  transition: border-color 0.2s ease,
+              box-shadow 0.2s ease;
+}
+
+.search-container:focus-within {
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.08);
+}
+
+
+/* TEXTAREA */
+
+.searcharea {
+  width: 100%;
+
+  min-height: 24px;
+  max-height: 140px;
+
+  padding: 8px 0;
+
+  border: none;
+  outline: none;
+  resize: none;
+
+  box-sizing: border-box;
+
+  background: transparent;
+
+  font-family: inherit;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #333;
+
+  overflow-y: auto;
+}
+
+.searcharea::placeholder {
+  color: #999;
+}
+
+
+/* SEARCH BUTTON */
+
+.search-button {
+  position: absolute;
+
+  right: 10px;
+  bottom: 10px;
+
+  width: 36px;
+  height: 36px;
+
+  padding: 0;
+
+  border: none;
+  border-radius: 50%;
+
+  background: #007bff;
+  color: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.search-button:hover {
+  background: #0069d9;
+
+  transform: scale(1.05);
+}
+
+.search-button:active {
+  transform: scale(0.95);
+}
+
+
+/* SVG */
+
+.search-button svg {
+  width: 18px;
+  height: 18px;
+}
+
+.note {
+  margin: 10px auto;
+  padding: 6px 12px;
+  color: #8d1b1b;
+  font-size: 15px;
+  text-align: center;
+}

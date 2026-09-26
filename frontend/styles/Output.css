@@ -1,0 +1,32 @@
+.output-section {
+    padding: 24px;
+}
+
+/* Each input file section */
+.input-file-section {
+    margin-bottom: 32px;
+    padding: 20px;
+    background: #fafbfc;
+    border: 1px solid #e7eaee;
+    border-radius: 12px;
+}
+
+/* Input file name */
+.input-file-section h2 {
+    margin: 0 0 18px 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #252a31;
+}
+
+/* Images inside one input file */
+.image-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 18px;
+}
+
+/* Small hover effect */
+.input-file-section:hover {
+    border-color: #dce1e7;
+}

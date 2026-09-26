@@ -38,15 +38,13 @@ func (l *LoginHandler) HandleLogin(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		response := models.Response{
 			Success: false,
-			Message: "lLogin credentials can't be validated.",
+			Message: "Login credentials can't be validated.",
 		}
 		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusBadRequest)
+		w.WriteHeader(http.StatusUnauthorized)
 		json.NewEncoder(w).Encode(response)
 		return
 	}
-
-	// check loginCredentials from database
 
 	// if the user doesn't exists
 	id, err := l.Store.LoginUser(ld)
