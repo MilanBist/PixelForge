@@ -21,21 +21,21 @@ export default function MainSubMainImage({main, subMain, setMain, setSubmain}){
                         <div className="sub-section">
                             {main === "transformation" && (
                                 <>
-                                <h2>Transformation</h2>
+                                <h2>Transformations</h2>
 
-                                <button onClick={()=>setSubmain("resize")}>Resize</button>
-                                <button onClick={()=>setSubmain("rotate")}>Rotate</button>
-                                <button onClick={()=>setSubmain("crop")}>Crop</button>
+                                <button onClick={()=>setSubmain("greyscale")}>GreyScale</button>
+                                <button onClick={()=>setSubmain("increaseB")}>Increase Brightness</button>
+                                <button onClick={()=>setSubmain("decreaseB")}>Decrease Brightness</button>
                                 </>
                             )}
 
                             {main === "resize" && (
                                 <>
-                                <h2>Brightness</h2>
+                                <h2>Resize</h2>
 
-                                <button onClick={()=>setSubmain("brightness")}>Brightness</button>
-                                <button onClick={()=>setSubmain("contrast")}></button>
-                                <button onClick={()=>setSubmain("saturation")}>Saturation</button>
+                                <button onClick={()=>setSubmain("onex")}>1 x</button>
+                                <button onClick={()=>setSubmain("twox")}>2 x</button>
+                                <button onClick={()=>setSubmain("threex")}>3 x</button>
                                 </>
                             )}
 
@@ -43,9 +43,9 @@ export default function MainSubMainImage({main, subMain, setMain, setSubmain}){
                                 <>
                                 <h2>Filters</h2>
 
-                                <button onClick={()=>setSubmain("greyscale")}>Grayscale</button>
                                 <button onClick={()=>setSubmain("blur")}>Blur</button>
                                 <button onClick={()=>setSubmain("sharpen")}>Sharpen</button>
+                                <button onClick={()=>setSubmain("edge")}>Edge</button>
                                 </>
                             )}
                         </div>

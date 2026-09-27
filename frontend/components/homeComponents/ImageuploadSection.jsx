@@ -1,11 +1,13 @@
 import '../../styles/Home.css'
 import MainSubMainImage from './MainSubMainImage'
-import apiClient from '../../utils/Base'
 import { useState } from 'react'
+import axios from 'axios';
 
 export default function AddImageCard({main, subMain, setMain, setSubMain}){
 
     const [file, setFile] = useState(null);
+    const[main, setMain] = useState(null);
+    const[subMain, setSubMain] = useState(null);
 
     const handleFileChange = (evt)=>{
         setFile(evt.target.files[0]);
@@ -16,10 +18,27 @@ export default function AddImageCard({main, subMain, setMain, setSubMain}){
             return;
         }
 
+        if (main === null || subMain === null){
+            alert("Set both of the main and submain properly first.");
+            return;
+        }
+        
+
         const formData = new FormData();
+
         // set the field for the file
         formData.append("file", file);
-        apiClient.post("/getImages", formData).then((resp)=>{
+        formData.append("mainTask", main);
+        formData.append("subTask", subMain);
+
+        const data = {
+            formdata: formData,
+            mainTask: main,
+            subTask: subMain,
+        };
+
+
+        axios.post("http://localhost:8081/api/getImageTransformed", data).then((resp)=>{
             console.log("Response is: ", resp);
         }).catch((error)=>{
             const responseStatus = error.response.status;
@@ -64,9 +83,6 @@ export default function AddImageCard({main, subMain, setMain, setSubMain}){
                 <div className="card-footer">
                     <span>Upload valid image file.</span>
                 </div>
-
-
-                {/* <PromptSection/> */}
             </div>
         </>
     )

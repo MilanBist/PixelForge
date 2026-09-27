@@ -17,6 +17,7 @@ type UploadedFilesMetaData struct{
 	Mimetype	string		`json:"mimeType"`
 	FileSize 	any		    `json:"filesize"`
 	Height		any			`json:"height"`
+	Width       any			`json:"width"`
 	CreatedAt 	time.Time 	`json:"createdAt"`
 }
 

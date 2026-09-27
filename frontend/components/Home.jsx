@@ -29,6 +29,7 @@ function SourceAssets({setOutputSection, setHistorySection, setUploadedSection})
 }
 
 export default function Home({setOutputSection, setHistorySection, setUploadedSection}) {
+
   return (
     <main className="home-page">
       <SourceAssets setOutputSection={setOutputSection} setHistorySection={setHistorySection} setUploadedSection={setUploadedSection}/>

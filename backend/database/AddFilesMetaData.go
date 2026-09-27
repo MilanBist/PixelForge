@@ -30,6 +30,31 @@ func(p *PostgresData) AddUploadedFiles(uploadedMetaData models.UploadedFilesMeta
 		return int(id), nil
 }
 
+func(p *PostgresData) AddUploadedImageFiles(uploadedMetaData models.UploadedFilesMetaData)(int, error){
+	
+	var id int64
+
+	err := p.Db.QueryRow(
+		context.Background(),
+		`INSERT INTO "uploadedFiles" ("userId", "fileName", "storageKey", "fileType", "mimeType", "fileSize", "height", "width") 
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING "id"`,
+		uploadedMetaData.UserId,
+		uploadedMetaData.Filename,
+		uploadedMetaData.StorageKey,
+		uploadedMetaData.FileType,
+		uploadedMetaData.Mimetype,
+		uploadedMetaData.FileSize,
+		uploadedMetaData.Height,
+		uploadedMetaData.Width,
+	).Scan(&id)
+
+	if err != nil{
+		fmt.Println("Package Database. Error: ", err)
+		return -1, err
+	}
+		return int(id), nil
+}
+
 	
 
 func(p *PostgresData) AddGeneratedFiles(generatedFilesMetaData models.GeneratedImageMetaData)(int64, error){
