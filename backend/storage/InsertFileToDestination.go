@@ -8,7 +8,6 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-
 	"github.com/image-generator/engine"
 )
 
@@ -99,4 +98,15 @@ func (f *StoreFile) GenerateImage(exactFilePath string, userId string) (engine.A
 	fmt.Println()
 	fmt.Println()
 	return allImageFiles, http.StatusAccepted, nil
+}
+
+// Generate image transformation based on the main and submain task and filepath
+func(f *StoreFile) GenerateImageTransformations(mainTask, subMainTask, filePath, userId, mimetype string) (string, error){
+	filePathToSave := filepath.Join(f.BasePath, userId, "generated")
+	path, err := engine.PerformAction(mainTask, subMainTask, filePath, filePathToSave,mimetype)
+	if err != nil{
+		fmt.Println(err)
+		return "", err
+	}
+	return path, err
 }

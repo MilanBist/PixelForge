@@ -7,12 +7,14 @@ import (
 	"net/http"
 	"path/filepath"
 	"strconv"
+	"strings"
+
 	"github.com/image-generator/internal/models"
 )
 
 type TransformImage interface{
 	AddRawFileToDestination(file multipart.File, filename, userId string) (string,int, error)
-	GenerateImageTranformation(main, subMain string) error
+	GenerateImageTranformation(main, subMain,mimetype string) (string,error)
 	GetDimension(location string) (int, int, int64, error)
 }
 
@@ -101,7 +103,6 @@ func(i *ImageTransformation) HandleSingleImageTransformation(w http.ResponseWrit
 
 	// add the uploaded files
 	exactFilePath, statusCode, err := i.UploadGenerate.AddRawFileToDestination(file, filename, strconv.Itoa(userId))
-
 	if err != nil{
 		response := models.Response{
 			Success: false,
@@ -113,10 +114,10 @@ func(i *ImageTransformation) HandleSingleImageTransformation(w http.ResponseWrit
 		return
 	}
 	// loop through each of the mian and submain 
-	uploadingFile := models.UploadedFilesMetaData{
-		UserId: int64(userId),
-		Filename: header.Filename,
-	}
+	// uploadingFile := models.UploadedFilesMetaData{
+	// 	UserId: int64(userId),
+	// 	Filename: header.Filename,
+	// }
 
 	
 	height, width, size, err := i.UploadGenerate.GetDimension(exactFilePath)
@@ -158,12 +159,56 @@ func(i *ImageTransformation) HandleSingleImageTransformation(w http.ResponseWrit
 		return
 	}
 	
+
+	imageCredentials := []models.BaseImageMetaData{}
 	
-	// for i := range imgOperations.MainTask{
-	// 	// now get the images data
+	// based on the uploadedId and uploaded path of the image transform the iamge
+	for j := range imgOperations.MainTask{
+		// based on the main and submain transform the image and add to the location and get the exactpath
+		storageKey, err := i.UploadGenerate.GenerateImageTranformation(imgOperations.MainTask[j], imgOperations.SubmainTask[j], mimetype)
+		if err != nil{
+			response := models.Response{
+			Success: false,
+			Message: err.Error(),
+		}
+		w.WriteHeader(500)
+		json.NewEncoder(w).Encode(response)
+		return
+		}
 
-	// }
+		// based on the the data now upload the storage key in the generated section
+		height, width, size, err := i.UploadGenerate.GetDimension(storageKey) 
+		if err != nil{
+			if err.Error() == "invalid"{
+				continue
+			}
+		}
 
+		splittedData := strings.Split(storageKey, "/")
 
-	
+		credentials := models.GeneratedImageMetaData{
+			Userid: int64(metaData.UserId),
+			SourceFieldId: int64(uploadedId),
+			Filename: splittedData[len(splittedData)-1],
+			StorageKey: storageKey,
+			Mimetype: "image/jpg",
+			Width: width,
+			Height: height,
+			FileSize: size,
+		}
+		fmt.Println(credentials)
+
+		frontendSendingCredentials := models.BaseImageMetaData{
+			Mimetype: "image/jpg",
+			Width: width,
+			Height: height,
+			FileSize: size,
+		}
+
+		imageCredentials = append(imageCredentials, frontendSendingCredentials)
+
+}
+
+	fmt.Println(imageCredentials)
+
 }
