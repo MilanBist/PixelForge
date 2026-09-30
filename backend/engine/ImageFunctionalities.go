@@ -23,21 +23,29 @@ func PerformAction(command, specificity, filepath, filePathToSave, mimeType stri
 			return "", errors.New("Error in creating file destination")
 		}
 	}
+
+	var path string
+	var err1 error
+
 	switch command {
 	case "transformation":
-		transformedPath, err := functionalities.PerformTransformations(specificity, filepath, filePathToSave, mimeType)
+		path, err1 = functionalities.PerformTransformations(specificity, filepath, filePathToSave, mimeType)
+		if err1 != nil{
+			return "", err
+		}
+
+	case "resize":
+		path, err1 = functionalities.PerformResize(specificity, filepath, filePathToSave, mimeType)
 		if err != nil{
 			return "", err
 		}
 
-		return transformedPath, nil
-
-	case "resize":
-		functionalities.PerformResize(specificity, filepath)
-
 	case "filters":
-		functionalities.PerformFilters(specificity, filepath)
+		path, err1 = functionalities.PerformFilters(specificity, filepath, filePathToSave, mimeType)
+		if err != nil{
+			return "", err
+		}
 	}
 
-	return "", errors.New("Error in opening the file.")
+	return path, err1
 }

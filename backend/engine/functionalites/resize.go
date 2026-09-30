@@ -1,32 +1,33 @@
 package functionalities
 
 import (
+	"fmt"
 	"image"
 	"image/color"
-	"image/jpeg"
 	_ "image/jpeg" // like the init in python  runs its header when decode it called to detect the jpeg files itself
 	_ "image/png"
 	"log"
 	"os"
-	"strconv"
 )
 
 // making the image large
-func makeLarge(filepath string, times int) {
+func makeLarge(filepath, filePathToSave, mimetype string, times int) (string, error){
 	// read the file and get it bounds and create a new bound from it which will be of double size perfectly
 
 	// open the file
 	file, err1 := os.Open(filepath)
 
 	if err1 != nil {
-		log.Println("Error in opening the file for resize. ", err1)
+		log.Println("[resizing portion]: Error in opening the file. ", err1)
+		return "", err1
 	}
 
 	// decode the file
 	img, _, err2 := image.Decode(file)
 
 	if err2 != nil {
-		log.Println("Error in decoding the file. ", err2)
+		log.Println("[resizing portion]: Error in decoding the file. ", err2)
+		return "", err2
 	}
 
 	// find the bounds of the given image and just make it double
@@ -83,41 +84,51 @@ func makeLarge(filepath string, times int) {
 		}
 	}
 
-	// make a newFile called as largeimages
-	folderPath := "largeFolder"
+	mapTimes := map[int]string{
+		1 : "onex",
+		2 : "twox",
+		3 : "threex",
+	}
 
-	_, err5 := os.Stat(folderPath)
-	if err5 != nil {
-		// means like the folder doesn't exist so that create
-		err6 := os.Mkdir(folderPath, 0755)
-		if err6 != nil {
-			log.Println("Error in creating a new folder to create a new folder for it")
+	var newLocation string
+	// check for the mimetype and create a new file
+	if mimetype == "image/png"{
+		newLocation, err1 = resizeBasedOnMimeType(mimetype,filePathToSave, ".png", mapTimes[times], largedImage)
+		fmt.Println("Grey image Portion: ", err1)
+		return "", err1
+	} else{
+		newLocation, err1 = resizeBasedOnMimeType(mimetype,filePathToSave, ".jpg", mapTimes[times], largedImage)
+		if err1 != nil{
+			fmt.Println("Grey image Portion: ", err1)
+			return "", err1
 		}
 	}
-	// create a new file path and also
-	filepath = folderPath + "/" + strconv.Itoa(times) + "times" + "larged" + filepath
-	// just print it in the new image
-	newImage, err3 := os.Create(filepath)
 
-	if err3 != nil {
-		log.Println("Error in creating a new file.", err3)
-	}
-	err4 := jpeg.Encode(newImage, largedImage, &jpeg.Options{Quality: 100})
-	if err4 != nil {
-		log.Println("Error in encoding the image in new jpeg file.")
-	}
+	return newLocation, nil
 
 }
 
 // what to do under resizing
-func PerformResize(specificity, filepath string) {
-
+func PerformResize(specificity, filepath, filePathToSave, mimeType string) (string, error){
+	var path string
+	var err error
 	switch specificity {
 	case "onex":
-		makeLarge(filepath, 1)
+		path, err = makeLarge(filepath, filePathToSave, mimeType, 1)
+		if err != nil{
+			return "", err
+		}
 	case "twox":
-		makeLarge(filepath, 2)
+		path, err = makeLarge(filepath, filePathToSave, mimeType, 2)
+		if err != nil{
+			return "", err
+		}
 	case "threex":
-		makeLarge(filepath, 3)
+		path, err = makeLarge(filepath,filePathToSave, mimeType, 3)
+		if err != nil{
+			return "", err
+		}
 	}
+
+	return path, err
 }

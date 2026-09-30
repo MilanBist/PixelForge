@@ -5,27 +5,27 @@ import (
 	"fmt"
 	"image"
 	"image/color"
-	"image/jpeg"
 	_ "image/jpeg" // like the init in python  runs its header when decode it called to detect the jpeg files itself
 	_ "image/png"
-	"log"
 	"os"
 )
 
 // making the image look blur
-func makeBlur(filepath string) {
+func makeBlur(filepath, filePathToSave, mimetype string) (string, error){
 	// open the given image
 	file, err1 := os.Open(filepath)
 
 	if err1 != nil {
-		log.Println("Error in opening the image file. ", err1)
+		fmt.Println("[blurring section]Error in opening the image file. ", err1)
+		return "", err1
 	}
 
 	// decode the given file
 	img, _, err2 := image.Decode(file)
 
 	if err2 != nil {
-		log.Println("Error in decoding the image file. ", err2)
+		fmt.Println("[blurring section]Error in decoding the image file. ", err1)
+		return "", err1
 	}
 
 	// get the bounds of the given image
@@ -80,39 +80,23 @@ func makeBlur(filepath string) {
 			blurredImage.SetNRGBA(x, y, color.NRGBA{R, G, B, A})
 		}
 	}
-
-	// create a newDirectory to store blur
-	folderPath := "blur"
-	_, err4 := os.Stat(folderPath)
-
-	if err4 != nil{
-		// means it doesn't exist so create it
-		err5 := os.Mkdir("blur", 0755)
-		if err5 != nil{
-			log.Println("Error in creating a newFolder.")
-		}
-
-	}
-	
-	// write in the file insdie of the folder
-	filepath = folderPath +"/"+ "blured" + filepath
-
-
-	// create a new file and just save the given content
-	imageFile, err3 := os.Create(filepath)
-
-	if err3 != nil {
-		log.Println("Error in creating the file. ", err3)
-	}
-
-	// Now insert in to this image
-	err7 := jpeg.Encode(imageFile, blurredImage, nil)
-
-	if err7 != nil{
-		log.Println("Error in encoding inside the file.", err7)
+	var newLocation string
+	// check for the mimetype and create a new file
+	if mimetype == "image/png"{
+		newLocation, err1 = blurBasedOnMimeType(mimetype,filePathToSave, ".png", blurredImage)
+		fmt.Println("Grey image Portion: ", err1)
+		return "", err1
 	} else{
-		fmt.Println("Please check in the blur folder.")
+		newLocation, err1 = blurBasedOnMimeType(mimetype,filePathToSave, ".jpg", blurredImage)
+		if err1 != nil{
+			fmt.Println("Grey image Portion: ", err1)
+			return "", err1
+		}
 	}
+
+	return newLocation, nil
+
+
 }
 
 // making the image look more sharp enough
@@ -171,14 +155,21 @@ func detectEdge(filepath string) {
 
 }
 
-func PerformFilters(specificity, filepath string) {
+func PerformFilters(specificity, filepath, filePathToSave, mimeType string)(string, error) {
 	// blur sharpen and edge detection
+	var path string
+	var err error
 	switch specificity {
 	case "blur":
-		makeBlur(filepath)
+		path, err = makeBlur(filepath, filePathToSave, mimeType)
+		if err != nil{
+			return "", err
+		}
 	case "sharpen":
 		makeSharpen(filepath)
 	case "edge":
 		detectEdge(filepath)
 	}
+
+	return path, err
 }
