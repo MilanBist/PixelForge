@@ -1,3 +1,5 @@
+import "../../styles/ImageButton.css"
+
 export default function MainSubMainImage({main, subMain, setMain, setSubmain}){
     return(
         <>
@@ -5,15 +7,15 @@ export default function MainSubMainImage({main, subMain, setMain, setSubmain}){
                 <div className="main-content">
                     <h3>Image transformation</h3>
 
-                    <button onClick={()=>setMain("transformation")}>
+                    <button className={main === "transformation" ? "selected" : ""} onClick={()=>setMain("transformation")}>
                         Transformation
                     </button>
 
-                    <button onClick={()=>setMain("filters")}>
+                    <button className={main === "filters" ? "selected" : ""} onClick={()=>setMain("filters")}>
                         filters
                     </button>
 
-                    <button onClick={()=>setMain("resize")}>
+                    <button className={main === "resize" ? "selected" : ""} onClick={()=>setMain("resize")}>
                         resize
                     </button>
 
@@ -23,9 +25,9 @@ export default function MainSubMainImage({main, subMain, setMain, setSubmain}){
                                 <>
                                 <h2>Transformations</h2>
 
-                                <button onClick={()=>setSubmain("greyscale")}>GreyScale</button>
-                                <button onClick={()=>setSubmain("increaseBrigtness")}>Increase Brightness</button>
-                                <button onClick={()=>setSubmain("decreaseBrightness")}>Decrease Brightness</button>
+                                <button className={subMain === "greyscale" ? "selected" : ""} onClick={()=>setSubmain("greyscale")}>GreyScale</button>
+                                <button className={subMain === "increaseBrigtness" ? "selected" : ""} onClick={()=>setSubmain("increaseBrigtness")}>Increase Brightness</button>
+                                <button className={subMain === "decreaseBrightness" ? "selected" : ""} onClick={()=>setSubmain("decreaseBrightness")}>Decrease Brightness</button>
                                 </>
                             )}
 
@@ -33,9 +35,9 @@ export default function MainSubMainImage({main, subMain, setMain, setSubmain}){
                                 <>
                                 <h2>Resize</h2>
 
-                                <button onClick={()=>setSubmain("onex")}>1 x</button>
-                                <button onClick={()=>setSubmain("twox")}>2 x</button>
-                                <button onClick={()=>setSubmain("threex")}>3 x</button>
+                                <button className={subMain === "onex" ? "selected" : ""} onClick={()=>setSubmain("onex")}>1 x</button>
+                                <button className={subMain === "twox" ? "selected" : ""} onClick={()=>setSubmain("twox")}>2 x</button>
+                                <button className={subMain === "threex" ? "selected" : ""} onClick={()=>setSubmain("threex")}>3 x</button>
                                 </>
                             )}
 
@@ -43,9 +45,9 @@ export default function MainSubMainImage({main, subMain, setMain, setSubmain}){
                                 <>
                                 <h2>Filters</h2>
 
-                                <button onClick={()=>setSubmain("blur")}>Blur</button>
-                                <button onClick={()=>setSubmain("sharpen")}>Sharpen</button>
-                                <button onClick={()=>setSubmain("edge")}>Edge</button>
+                                <button className={subMain === "blur" ? "selected" : ""} onClick={()=>setSubmain("blur")}>Blur</button>
+                                <button className={subMain === "sharpen" ? "selected" : ""} onClick={()=>setSubmain("sharpen")}>Sharpen</button>
+                                <button className={subMain === "edge" ? "selected" : ""} onClick={()=>setSubmain("edge")}>Edge</button>
                                 </>
                             )}
                         </div>

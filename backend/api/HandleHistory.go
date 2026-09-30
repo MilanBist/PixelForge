@@ -110,5 +110,6 @@ func(h *History) HandleHistory(w http.ResponseWriter, r *http.Request){
 		Data: sendingData,
 	}
 
+	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(&response)
 }

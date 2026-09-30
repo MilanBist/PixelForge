@@ -2,6 +2,7 @@ import '../../styles/Home.css'
 import MainSubMainImage from './MainSubMainImage'
 import { useState } from 'react'
 import axios from 'axios';
+import { getNewAccessToken } from '../../utils/NewAccessToken';
 
 export default function AddImageCard({main, subMain, setMain, setSubMain, setOutput}){
 
@@ -9,54 +10,85 @@ export default function AddImageCard({main, subMain, setMain, setSubMain, setOut
     const handleFileChange = (evt)=>{
         setFile(evt.target.files[0]);
     }
-    const getTransformedImage = async ()=>{
-        if (file === null){
+    const getTransformedImage = async () => {
+        let refreshToken = localStorage.getItem("refreshToken");
+        if (file === null) {
             alert("Upload the files first.");
             return;
         }
 
-        if (main === null || subMain === null){
+        if (main === null || subMain === null) {
             alert("Set both of the main and submain properly first.");
             return;
         }
 
         const formData = new FormData();
 
-        // set the field for the file
+        // Set the fields
         formData.append("file", file);
         formData.append("mainTask", main);
         formData.append("subMainTask", subMain);
 
+        try {
+            const resp = await axios.post(
+                "http://localhost:8081/api/transformImage",formData,{
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("accessToken")}`
+                    }
+                }
+            );
 
-        axios.post("http://localhost:8081/api/transformImage", formData, {
-            headers:{
-                Authorization: `Bearer ${localStorage.getItem("accessToken")}`
-            }
-        }).then((resp)=>{
             console.log("Response is: ", resp);
-            setOutput((prev)=>[
-                ...prev, 
-                resp.data["data"],
+
+            setOutput((prev) => [
+                ...prev,
+                resp.data["data"]
             ]);
-        }).catch((error)=>{
-            const responseStatus = error.response.status;
-            switch(responseStatus){
-                case 400:
+        } catch (error) {
+            const responseStatus = error.response?.status;
+            switch (responseStatus) {
+                case 400: {
                     console.log(error.response.data.message);
                     alert(error.response.data.message);
-                case 401:
-                    let msg = error.response.data.message;
-                    console.log(msg)
-                    alert(msg);
-                case 500:
-                    msg = error.response.data.message;
-                    console.log(msg)
-                    alert(msg);           
+                    break;
                 }
-        }).finally(()=>{
-            console.log("Image fetching completed.")
-        })
-    }
+
+                case 401: {
+                    const msg = error.response.data.message;
+                    const response = await getNewAccessToken(refreshToken);
+                    console.log("Historical Data:", response);
+                    if (response === 401) {
+                        alert("You are logged out. Please login again");
+                        setTimeout(() => {
+                            navigate("/login");
+                        }, 1000);
+
+                        return;
+                    }
+
+                    if (response === 200) {
+                        return getTransformedImage();
+                    }
+                    alert(msg);
+                    break;
+                }
+                case 500: {
+                    const msg = error.response.data.message;
+                    console.log(msg);
+                    alert(msg);
+                    break;
+                }
+                default: {
+                    console.log("Unexpected error:", error);
+                    alert("Something went wrong.");
+                    break;
+                }
+            }
+
+        } finally {
+            console.log("Image fetching completed.");
+        }
+    };
     return (
         <>
             <div className="asset-card">

@@ -145,9 +145,6 @@ func(i *ImageTransformation) HandleSingleImageTransformation(w http.ResponseWrit
 
 	imageCredentials := []models.BaseImageMetaData{}
 	
-	// based on the uploadedId and uploaded path of the image transform the iamge
-	// for j := range imgOperations.MainTask{
-		// based on the main and submain transform the image and add to the location and get the exactpath
 	storageKey, err := i.UploadGenerate.GenerateImageTransformations(mainTask, subMainTask, exactFilePath, strconv.Itoa(metaData.UserId), mimetype)
 	if err != nil{
 		response := models.Response{
