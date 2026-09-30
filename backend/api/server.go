@@ -86,6 +86,12 @@ func(srv *Server) setupRoutes(){
 		Data: store,
 	}
 
+	imageTransformerSrv := &ImageTransformation{
+		Store: store,
+		Dimension: dimension,
+		UploadGenerate: imageGenerationService,
+	}
+
 	srv.Router.Get("/api/health", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Success in getting response."))
 	})
@@ -117,6 +123,9 @@ func(srv *Server) setupRoutes(){
 
 			// handle for the history data
 			r.Get("/history", historySrv.HandleHistory)
+
+			// handle for the image transformations
+			r.Post("/transformImage", imageTransformerSrv.HandleSingleImageTransformation)
 
 		})
 	})
