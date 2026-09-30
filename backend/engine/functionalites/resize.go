@@ -94,8 +94,10 @@ func makeLarge(filepath, filePathToSave, mimetype string, times int) (string, er
 	// check for the mimetype and create a new file
 	if mimetype == "image/png"{
 		newLocation, err1 = resizeBasedOnMimeType(mimetype,filePathToSave, ".png", mapTimes[times], largedImage)
-		fmt.Println("Grey image Portion: ", err1)
-		return "", err1
+		if err1 != nil{
+			fmt.Println("Size increasing image Portion: ", err1)
+			return "", err1
+		}
 	} else{
 		newLocation, err1 = resizeBasedOnMimeType(mimetype,filePathToSave, ".jpg", mapTimes[times], largedImage)
 		if err1 != nil{

@@ -31,6 +31,8 @@ func(s *SingleImageProperty) HandleSingleImageProperty(w http.ResponseWriter, r 
 	imageId, _ := strconv.Atoi(imgId)
 	mimetype := r.URL.Query().Get("mimetype")
 
+	fmt.Println("The imageid is: ",imgId)
+	fmt.Println("The mimetype is: ", mimetype)
 
 	if imgId == ""{
 		w.WriteHeader(http.StatusBadRequest)
@@ -46,6 +48,7 @@ func(s *SingleImageProperty) HandleSingleImageProperty(w http.ResponseWriter, r 
 
 	// get the storage Key based on the provided Image id from images
 	storageKey, err := s.Store.GetImageStorageKey(imageId, userId)
+	fmt.Println("Storage Key: ", storageKey)
 	if err != nil{
 		response := models.Response{
 			Success: false,

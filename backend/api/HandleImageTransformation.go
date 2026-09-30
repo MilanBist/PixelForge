@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"strings"
 	"github.com/image-generator/internal/models"
+	"net/url"
 )
 
 type TransformImage interface{
@@ -50,28 +51,12 @@ func(i *ImageTransformation) HandleSingleImageTransformation(w http.ResponseWrit
 	}
 
 	mainTask := r.FormValue("mainTask")
-	// err = json.Unmarshal([]byte(mainTask), &imgOperations.MainTask)
-	// if err != nil{
-	// 	w.WriteHeader(http.StatusInternalServerError)
-	// 	json.NewEncoder(w).Encode(map[string]string{
-	// 		"message": "Can't decode the main and submainTask.",
-	// 	})
-    //     return
-	// }
 	subMainTask := r.FormValue("subMainTask")
-	// err = json.Unmarshal([]byte(mainTask), &imgOperations.SubmainTask)
-	// err = json.Unmarshal([]byte(mainTask), &imgOperations.MainTask)
-	// if err != nil{
-	// 	w.WriteHeader(http.StatusInternalServerError)
-	// 	json.NewEncoder(w).Encode(map[string]string{
-	// 		"message": "Can't decode the main and submainTask.",
-	// 	})
-    //     return
-	// }
+
 	filename := header.Filename
+	filename = url.PathEscape(filename)
 	extensionName := filepath.Ext(filename)
 	// check for the file extension
-	fmt.Println(filepath.Ext(filename))
 	if extensionName != ".jpg" && extensionName != ".png"{
 		fmt.Println("Wrong file name. Should be .png or .jpg file.")
 		w.WriteHeader(http.StatusBadRequest)
@@ -114,7 +99,6 @@ func(i *ImageTransformation) HandleSingleImageTransformation(w http.ResponseWrit
 		return
 	}
 
-	
 	height, width, size, err := i.Dimension.GetDimension(exactFilePath)
 	if err != nil{
 		response := models.Response{
@@ -145,7 +129,6 @@ func(i *ImageTransformation) HandleSingleImageTransformation(w http.ResponseWrit
 		Width: width,
 	}
 
-	fmt.Println("Uploading meta data: ", uploadingMetaData)
 
 	uploadedId, err := i.Store.AddUploadedImageFiles(uploadingMetaData)
 	if err != nil{
@@ -158,7 +141,6 @@ func(i *ImageTransformation) HandleSingleImageTransformation(w http.ResponseWrit
 		return
 	}
 
-	fmt.Println("Uploaded id: ", uploadedId)
 	
 
 	imageCredentials := []models.BaseImageMetaData{}
@@ -166,27 +148,27 @@ func(i *ImageTransformation) HandleSingleImageTransformation(w http.ResponseWrit
 	// based on the uploadedId and uploaded path of the image transform the iamge
 	// for j := range imgOperations.MainTask{
 		// based on the main and submain transform the image and add to the location and get the exactpath
-		storageKey, err := i.UploadGenerate.GenerateImageTransformations(mainTask, subMainTask, exactFilePath, strconv.Itoa(metaData.UserId), mimetype)
-		if err != nil{
-			response := models.Response{
-			Success: false,
-			Message: err.Error(),
-		}
-		w.WriteHeader(500)
-		json.NewEncoder(w).Encode(response)
-		return
-		}
+	storageKey, err := i.UploadGenerate.GenerateImageTransformations(mainTask, subMainTask, exactFilePath, strconv.Itoa(metaData.UserId), mimetype)
+	if err != nil{
+		response := models.Response{
+		Success: false,
+		Message: err.Error(),
+	}
+	w.WriteHeader(500)
+	json.NewEncoder(w).Encode(response)
+	return
+	}
 
-		fmt.Println("Storage Key: ", i)
-		fmt.Println(storageKey)
-
-		// based on the the data now upload the storage key in the generated section
-		height, width, size, err = i.Dimension.GetDimension(storageKey) 
-		// if err != nil{
-		// 	if err.Error() == "invalid"{
-		// 		continue
-		// 	}
-		// }
+	height, width, size, err = i.Dimension.GetDimension(storageKey) 
+	if err != nil{
+		response := models.Response{
+		Success: false,
+		Message: err.Error(),
+	}
+	w.WriteHeader(500)
+	json.NewEncoder(w).Encode(response)
+	return
+	}
 
 	splittedData := strings.Split(storageKey, "/")
 
@@ -200,7 +182,6 @@ func(i *ImageTransformation) HandleSingleImageTransformation(w http.ResponseWrit
 		Height: height,
 		FileSize: size,
 	}
-	fmt.Println(credentials)
 
 	frontendSendingCredentials := models.BaseImageMetaData{
 		Mimetype: "image/jpg",
@@ -224,7 +205,6 @@ func(i *ImageTransformation) HandleSingleImageTransformation(w http.ResponseWrit
 
 	frontendSendingCredentials.Id = generatedId
 
-	// prepare the statements to send to the fronten
 	actualFile := models.BaseFileData{
 		Id: int64(uploadedId),
 		Filename: filename,
@@ -239,7 +219,6 @@ func(i *ImageTransformation) HandleSingleImageTransformation(w http.ResponseWrit
 		Message: "success",
 		Data: responseData,
 	}
-
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(&response)
 }

@@ -6,6 +6,8 @@ export default function ImageCard({ image }) {
 
     const [preview, setPreview] = useState(null);
 
+    console.log("Image properties are: ", image);
+
     async function handlePreview() {
         try {
             const response = await apiClient.get("/getSingleImage", {

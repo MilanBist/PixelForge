@@ -84,12 +84,15 @@ func makeBlur(filepath, filePathToSave, mimetype string) (string, error){
 	// check for the mimetype and create a new file
 	if mimetype == "image/png"{
 		newLocation, err1 = blurBasedOnMimeType(mimetype,filePathToSave, ".png", blurredImage)
-		fmt.Println("Grey image Portion: ", err1)
+		if err1 != nil{
+			fmt.Println("Blur image Portion: ", err1)
+			return "", err1
+		}
 		return "", err1
 	} else{
 		newLocation, err1 = blurBasedOnMimeType(mimetype,filePathToSave, ".jpg", blurredImage)
 		if err1 != nil{
-			fmt.Println("Grey image Portion: ", err1)
+			fmt.Println("Blur image Portion: ", err1)
 			return "", err1
 		}
 	}
@@ -101,53 +104,7 @@ func makeBlur(filepath, filePathToSave, mimetype string) (string, error){
 
 // making the image look more sharp enough
 func makeSharpen(filepath string) {
-	// // Sharpening of image via Leplacian filter
-	// // basic lap matrix [0 1 0][1-4 1][0 1 0]
 
-	// lapMatrix := [][]int{{0,1,0},{1,-4,1},{0,1,0}}
-
-	// // open the image file
-	// file, err1 := os.Open(filepath)
-
-	// if err1 != nil{
-	// 	fmt.Println("Error in opening the file with path ", filepath)
-	// 	log.Fatal(err1)
-	// }
-
-	// // find boundary and get each of the given pixels
-	// img, _, err2 := image.Decode(file)
-
-	// if err2 != nil{
-	// 	fmt.Println("Error in decoding the file. ")
-	// 	log.Fatal(err2)
-	// }
-
-	// // find the bounds of teh given files
-	// b := img.Bounds()
-	// maxY := b.Max.Y
-	// maxX := b.Max.X
-
-	// newImg := image.NewNRGBA(b)
-	// for y:=0; y<maxY; y++{
-	// 	for x:=0; x<maxX; x++{
-	// 		// get the pixels at each of the positon
-	// 		pixel := img.At(x,y)
-	// 		r,g,b,a := pixel.RGBA()
-
-	// 		// now get the matrix of the pixels of the neighbouring pixels from image
-	// 		var lapr, lapg, lapb uint32
-	// 		if x>0 && x < maxX-1 && y>0 && y<maxX-1{
-	// 		for i:=x-1; i<=x+1; i++{
-	// 			for j:=y-1; j<= y+1; j++{
-	// 				// get the pixels at each of the given position
-	// 				currentPix := img.At(i,j)
-	// 				r1,g1,b1, _ := currentPix.RGBA()
-					
-	// 			}
-	// 		}
-	// 	}
-	// 	}
-	// }
 }
 
 // detecting the edges of the images

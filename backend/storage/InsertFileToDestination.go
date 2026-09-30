@@ -104,9 +104,12 @@ func (f *StoreFile) GenerateImage(exactFilePath string, userId string) (engine.A
 func(f *StoreFile) GenerateImageTransformations(mainTask, subMainTask, filePath, userId, mimetype string) (string, error){
 	filePathToSave := filepath.Join(f.BasePath, userId, "generated")
 	path, err := engine.PerformAction(mainTask, subMainTask, filePath, filePathToSave,mimetype)
+	fmt.Println("Error is : ", err)
 	if err != nil{
 		fmt.Println(err)
 		return "", err
 	}
+
+	fmt.Println("The actual path is: ", path)
 	return path, err
 }

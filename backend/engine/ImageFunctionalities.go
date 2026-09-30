@@ -13,8 +13,6 @@ import (
 func PerformAction(command, specificity, filepath, filePathToSave, mimeType string) (string, error){
 	// if command is transformations
 	folderExistence, err := pathExistence(filePathToSave)
-	fmt.Println("Base output path is: ", filePathToSave)
-	fmt.Println(folderExistence, err)
 	if err == os.ErrNotExist || folderExistence == false{
 		// create the folder
 		err := os.MkdirAll(filePathToSave, 0755)
@@ -30,6 +28,7 @@ func PerformAction(command, specificity, filepath, filePathToSave, mimeType stri
 	switch command {
 	case "transformation":
 		path, err1 = functionalities.PerformTransformations(specificity, filepath, filePathToSave, mimeType)
+		fmt.Println("For the transformation is: ",path, err1)
 		if err1 != nil{
 			return "", err
 		}

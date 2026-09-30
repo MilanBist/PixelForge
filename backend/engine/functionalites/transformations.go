@@ -16,7 +16,8 @@ func makeGreyScale(path, filePathToSave, mimetype string) (string, error){
 	// open the given file
 	file, err1 := os.Open(path)
 	if err1 != nil {
-		log.Println("Error in opening the filepath. ", err1)
+		fmt.Println("Error in opening the filepath. ", err1)
+		return "", err1
 	}
 
 	// now find the bound of the given file
@@ -55,8 +56,9 @@ func makeGreyScale(path, filePathToSave, mimetype string) (string, error){
 	// check for the mimetype and create a new file
 	if mimetype == "image/png"{
 		newLocation, err1 = transformBasedOnMimeType(mimetype,filePathToSave, ".png", grayImage)
-		fmt.Println("Grey image Portion: ", err1)
-		return "", err1
+		if err1 != nil{
+			return "", err1
+		}
 	} else{
 		newLocation, err1 = transformBasedOnMimeType(mimetype,filePathToSave, ".jpg", grayImage)
 		if err1 != nil{
@@ -65,6 +67,7 @@ func makeGreyScale(path, filePathToSave, mimetype string) (string, error){
 		}
 	}
 
+	fmt.Println("For the greyscale image: ", newLocation)
 	return newLocation, nil
 }
 
@@ -131,8 +134,10 @@ func increaseBrightness(path, filePathToSave, mimetype string) (string,error){
 	// check for the mimetype and create a new file
 	if mimetype == "image/png"{
 		newLocation, err1 = brightnessBasedOnMimeType(mimetype,filePathToSave, ".png", brightedImage, "increase")
-		fmt.Println("Increase Brigntness image Portion: ", err1)
-		return "", err1
+		if err1 != nil{
+			fmt.Println("Increase Brightness image Portion: ", err1)
+			return "", err1
+		}
 	} else{
 		newLocation, err1 = brightnessBasedOnMimeType(mimetype,filePathToSave, ".jpg", brightedImage, "increase")
 		if err1 != nil{
@@ -208,8 +213,10 @@ func decreaseBrightness(path, filePathToSave, mimetype string) (string,error) {
 	// check for the mimetype and create a new file
 	if mimetype == "image/png"{
 		newLocation, err1 = brightnessBasedOnMimeType(mimetype,filePathToSave, ".png",darkenedImage, "decrease")
-		fmt.Println("Decrease Brigntness image Portion: ", err1)
-		return "", err1
+		if err1 != nil{
+			fmt.Println("Decrease Brightness image Portion: ", err1)
+			return "", err1
+		}
 	} else{
 		newLocation, err1 = brightnessBasedOnMimeType(mimetype,filePathToSave, ".jpg", darkenedImage, "decrease")
 		if err1 != nil{
@@ -227,6 +234,7 @@ func PerformTransformations(specificity, filepath, filePathToSave, mimetype stri
 	switch specificity {
 	case "greyscale":
 		path, err = makeGreyScale(filepath, filePathToSave, mimetype)
+		fmt.Println("From the grey scale portion: ", path, err)
 		if err != nil{
 			fmt.Println("From grey scale place. Error: ", err)
 			return "", errors.New("Error from making grey scale part.")
