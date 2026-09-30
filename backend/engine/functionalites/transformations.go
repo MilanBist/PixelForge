@@ -75,11 +75,11 @@ func increaseBrightness(path, filePathToSave, mimetype string) (string,error){
 
 	// open the file
 	file, err1 := os.Open(path)
-	defer file.Close()
-
+	
 	if err1 != nil {
 		log.Println("Error in opening the file")
 	}
+	defer file.Close()
 	// decode the file
 	img, _, err2 := image.Decode(file)
 	if err2 != nil {

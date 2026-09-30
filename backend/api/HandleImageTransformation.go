@@ -72,7 +72,7 @@ func(i *ImageTransformation) HandleSingleImageTransformation(w http.ResponseWrit
 	extensionName := filepath.Ext(filename)
 	// check for the file extension
 	fmt.Println(filepath.Ext(filename))
-	if extensionName != ".jpg" && extensionName != "png"{
+	if extensionName != ".jpg" && extensionName != ".png"{
 		fmt.Println("Wrong file name. Should be .png or .jpg file.")
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]string{
@@ -224,10 +224,20 @@ func(i *ImageTransformation) HandleSingleImageTransformation(w http.ResponseWrit
 
 	frontendSendingCredentials.Id = generatedId
 
+	// prepare the statements to send to the fronten
+	actualFile := models.BaseFileData{
+		Id: int64(uploadedId),
+		Filename: filename,
+		FileType: mimetype,
+	}
+	var responseData models.FileBasedImageGenerationReturn
+	responseData.ActualFile = actualFile
+	responseData.GeneratedImage = append(responseData.GeneratedImage, frontendSendingCredentials)
+
 	response := models.Response{
 		Success: true,
 		Message: "success",
-		Data: frontendSendingCredentials,
+		Data: responseData,
 	}
 
 	w.WriteHeader(http.StatusOK)

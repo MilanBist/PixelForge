@@ -3,16 +3,13 @@ import MainSubMainImage from './MainSubMainImage'
 import { useState } from 'react'
 import axios from 'axios';
 
-export default function AddImageCard({main, subMain, setMain, setSubMain}){
+export default function AddImageCard({main, subMain, setMain, setSubMain, setOutput}){
 
-    const [file, setFile] = useState(null);
-    const[main, setMain] = useState(null);
-    const[subMain, setSubMain] = useState(null);
-
+    const[file, setFile] = useState(null);
     const handleFileChange = (evt)=>{
         setFile(evt.target.files[0]);
     }
-    const decodeRawFile = async ()=>{
+    const getTransformedImage = async ()=>{
         if (file === null){
             alert("Upload the files first.");
             return;
@@ -22,24 +19,25 @@ export default function AddImageCard({main, subMain, setMain, setSubMain}){
             alert("Set both of the main and submain properly first.");
             return;
         }
-        
 
         const formData = new FormData();
 
         // set the field for the file
         formData.append("file", file);
         formData.append("mainTask", main);
-        formData.append("subTask", subMain);
-
-        const data = {
-            formdata: formData,
-            mainTask: main,
-            subTask: subMain,
-        };
+        formData.append("subMainTask", subMain);
 
 
-        axios.post("http://localhost:8081/api/getImageTransformed", data).then((resp)=>{
+        axios.post("http://localhost:8081/api/transformImage", formData, {
+            headers:{
+                Authorization: `Bearer ${localStorage.getItem("accessToken")}`
+            }
+        }).then((resp)=>{
             console.log("Response is: ", resp);
+            setOutput((prev)=>[
+                ...prev, 
+                resp.data["data"],
+            ]);
         }).catch((error)=>{
             const responseStatus = error.response.status;
             switch(responseStatus){
@@ -50,8 +48,6 @@ export default function AddImageCard({main, subMain, setMain, setSubMain}){
                     let msg = error.response.data.message;
                     console.log(msg)
                     alert(msg);
-                    // get the new token using the refresh token.
-                    // if the refresh token still invalid then make the user log in again
                 case 500:
                     msg = error.response.data.message;
                     console.log(msg)
@@ -76,8 +72,8 @@ export default function AddImageCard({main, subMain, setMain, setSubMain}){
                 <input type="file" className="uploadImage" onChange={handleFileChange}/>
 
                 <MainSubMainImage main={main} subMain={subMain} setMain={setMain} setSubmain={setSubMain}/>
-                <button className="uploadraw-button" onSubmit={decodeRawFile} type='submit'>
-                    ▧ &nbsp; Upload image file.
+                <button className="uploadraw-button" onClick={getTransformedImage} type='submit'>
+                     Upload image file.
                 </button>
 
                 <div className="card-footer">

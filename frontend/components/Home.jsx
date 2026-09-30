@@ -22,7 +22,7 @@ function SourceAssets({setOutputSection, setHistorySection, setUploadedSection})
       </div>
       <div className="asset-grid">
         <RawExtractionCard setOutputSection={setOutputSection} setHistorySection={setHistorySection} setUploadedSection={setUploadedSection}/>
-        <AddImageCard main = {main}  subMain = {subMain}  setMain={setMain} setSubMain={setSubMain}/>
+        <AddImageCard main = {main}  subMain = {subMain}  setMain={setMain} setSubMain={setSubMain} setOutput={setOutputSection}/>
       </div>
     </section>
   );

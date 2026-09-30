@@ -24,8 +24,8 @@ export default function MainSubMainImage({main, subMain, setMain, setSubmain}){
                                 <h2>Transformations</h2>
 
                                 <button onClick={()=>setSubmain("greyscale")}>GreyScale</button>
-                                <button onClick={()=>setSubmain("increaseB")}>Increase Brightness</button>
-                                <button onClick={()=>setSubmain("decreaseB")}>Decrease Brightness</button>
+                                <button onClick={()=>setSubmain("increaseBrigtness")}>Increase Brightness</button>
+                                <button onClick={()=>setSubmain("decreaseBrightness")}>Decrease Brightness</button>
                                 </>
                             )}
 
