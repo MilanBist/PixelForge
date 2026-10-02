@@ -22,7 +22,7 @@ docker compose version
 ### 2. Clone the Repository
 
 ```bash
-git clone https://github.com/MilanBist/image-generator.git<your-repository-url>
+git clone https://github.com/MilanBist/image-generator.git
 cd image-generator/backend
 ```
 
