@@ -23,7 +23,7 @@ type UploadGenerationStore interface{
 	AddUploadedFiles(uploadedMetaData models.UploadedFilesMetaData) (int, error)
 	AddGeneratedFiles(generatedFilesMetaData models.GeneratedImageMetaData) (int64, error)
 	AddToHistoryOfUser(historyData models.History)(error)
-}
+} 
 
 // image dimesion interface
 type ImageDimensions interface{

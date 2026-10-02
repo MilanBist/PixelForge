@@ -1,3 +1,8 @@
 # Add the .env file
 .env
 
+uploadFiles/
+
+outputImages/
+
+images/

@@ -2,7 +2,6 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
 	"github.com/image-generator/internal/models"
@@ -31,9 +30,6 @@ func(s *SingleImageProperty) HandleSingleImageProperty(w http.ResponseWriter, r 
 	imageId, _ := strconv.Atoi(imgId)
 	mimetype := r.URL.Query().Get("mimetype")
 
-	fmt.Println("The imageid is: ",imgId)
-	fmt.Println("The mimetype is: ", mimetype)
-
 	if imgId == ""{
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(&map[string]any{
@@ -48,7 +44,6 @@ func(s *SingleImageProperty) HandleSingleImageProperty(w http.ResponseWriter, r 
 
 	// get the storage Key based on the provided Image id from images
 	storageKey, err := s.Store.GetImageStorageKey(imageId, userId)
-	fmt.Println("Storage Key: ", storageKey)
 	if err != nil{
 		response := models.Response{
 			Success: false,
@@ -71,8 +66,6 @@ func(s *SingleImageProperty) HandleSingleImageProperty(w http.ResponseWriter, r 
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(&response)
 	}
-
-	fmt.Println("Byted data is: ", bytedData)
 
 
 	var headerType string

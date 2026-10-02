@@ -130,5 +130,4 @@ func HandleImageGeneration_CheckingActualResponse(t *testing.T){
 		t.Fatalf("failed to decode response: %v", err)
 	}
 
-	// each method is being called so the handler works perfectly
 }

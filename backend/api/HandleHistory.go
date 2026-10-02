@@ -102,7 +102,11 @@ func(h *History) HandleHistory(w http.ResponseWriter, r *http.Request){
 
 	}
 
-
+	// at last just add the last file
+	if len(historyData) > 0 {
+    	data1.GeneratedImage = image
+    	sendingData = append(sendingData, data1)
+	}
 
 	response := models.Response{
 		Success: true,
