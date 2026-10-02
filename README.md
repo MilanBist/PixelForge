@@ -22,8 +22,7 @@ docker compose version
 ### 2. Clone the Repository
 
 ```bash
-git clone <your-repository-url>
-
+git clone https://github.com/MilanBist/image-generator.git<your-repository-url>
 cd image-generator/backend
 ```
 
@@ -47,7 +46,6 @@ You should see a PostgreSQL container similar to:
 backend-db-1   postgres:16   ...   0.0.0.0:5435->5432/tcp
 ```
 
-> **Note:** The host port may differ depending on your `docker-compose.yml` configuration.
 
 ### 4. Connect to PostgreSQL
 
@@ -193,7 +191,7 @@ The database stores information about users, uploaded files, generated images, a
 
 ## Testing
 
-The project includes unit and handler-level tests for the backend.
+The project includes handler-level tests for the backend.
 
 The tests use interfaces and fake implementations where appropriate so that handlers can be tested without depending on the actual database or file storage system.
 
@@ -253,13 +251,13 @@ Planned improvements for future versions include:
 * Better production configuration and secrets management
 
 ### Frontend
-
 * Improved image editor
 * Advanced image preview/lightbox
 * Better history organization
 * Drag-and-drop uploads
 * Progress indicators for long-running operations
 * More interactive image-processing controls
+* Implement the search bar with the webllm.
 
 ---
 
