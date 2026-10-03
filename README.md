@@ -9,7 +9,6 @@ A Go-based image processing and image generation application designed to work wi
 ## Backend Setup
 
 ### 1. Install Docker
-
 Install Docker and Docker Compose on your system.
 
 Verify the installation:
@@ -20,7 +19,6 @@ docker compose version
 ```
 
 ### 2. Clone the Repository
-
 ```bash
 git clone https://github.com/MilanBist/image-generator.git
 cd image-generator/backend
